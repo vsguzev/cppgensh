@@ -1,4 +1,4 @@
-include(cmake/CPM.cmake)
+include(CPM.cmake)
 
 CPMAddPackage("gh:cpm-cmake/testpack-fibonacci@2.0")
 
