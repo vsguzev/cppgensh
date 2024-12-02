@@ -150,6 +150,7 @@ cmake --build . || { echo "Build failed. Aborting."; exit 1; }
 
 # Run tests
 echo "Running tests..."
+cd tests
 ctest || { echo "Tests failed."; exit 1; }
 
 # Inform the user
