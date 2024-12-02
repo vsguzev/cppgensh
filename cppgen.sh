@@ -11,6 +11,21 @@ download_if_not_exist() {
   fi
 }
 
+# Prompt for project name
+read -p "Enter your project name: " PROJECT_NAME
+
+# Validate project name (optional)
+if [[ -z "$PROJECT_NAME" ]]; then
+  echo "Project name cannot be empty. Aborting."
+  exit 1
+fi
+
+# Replace spaces with underscores
+PROJECT_NAME=$(echo "$PROJECT_NAME" | sed 's/ /_/g')
+
+# Create a lowercase version of the project name
+PROJECT_NAME_LOWER=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
+
 # Download CPM.cmake
 download_if_not_exist "https://raw.githubusercontent.com/cpm-cmake/CPM.cmake/refs/heads/master/cmake/CPM.cmake" "cmake/CPM.cmake"
 
