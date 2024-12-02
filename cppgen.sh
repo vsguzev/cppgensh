@@ -64,8 +64,6 @@ EOL
 # Create tests/CMakeLists.txt
 echo "Generating tests/CMakeLists.txt..."
 cat <<EOL > tests/CMakeLists.txt
-enable_testing()
-
 add_executable(\${PROJECT_NAME}_tests test_main.cpp)
 
 target_link_libraries(\${PROJECT_NAME}_tests
@@ -73,6 +71,9 @@ target_link_libraries(\${PROJECT_NAME}_tests
     \${PROJECT_NAME}
 )
 
+target_link_libraries(\${PROJECT_NAME}_tests fibonacci gtest gtest_main gmock)
+
+enable_testing()
 add_test(NAME \${PROJECT_NAME}_tests COMMAND \${PROJECT_NAME}_tests)
 EOL
 
