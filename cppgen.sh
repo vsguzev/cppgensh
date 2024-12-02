@@ -41,7 +41,7 @@ mkdir -p src include tests
 echo "Generating root CMakeLists.txt..."
 cat <<EOL > CMakeLists.txt
 cmake_minimum_required(VERSION 3.14)
-project(MyProject VERSION 0.1.0 LANGUAGES CXX)
+project($PROJECT_NAME VERSION 0.1.0 LANGUAGES CXX)
 
 # Include CPM.cmake
 include(cmake/CPM.cmake)
