@@ -31,6 +31,7 @@ download_if_not_exist "https://raw.githubusercontent.com/cpm-cmake/CPM.cmake/ref
 
 # Download additional CMake modules (e.g., GTest.cmake)
 echo "Downloading additional CMake modules..."
+download_if_not_exist "https://raw.githubusercontent.com/vsguzev/cppgensh/refs/heads/main/cmake/Boost.cmake" "cmake/Boost.cmake"
 download_if_not_exist "https://raw.githubusercontent.com/vsguzev/cppgensh/refs/heads/main/cmake/GTest.cmake" "cmake/GTest.cmake"
 
 # Create directory structure
