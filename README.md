@@ -60,15 +60,19 @@ The project is ready for development.
 # Project Structure
 ```makefile
 MyNewProject/
+├── app/                # Executable files
+|   ├── CMakeLists.txt
+│   └── main.cpp
 ├── build/                  # Build directory (generated)
 ├── cmake/                  # CMake modules
+│   ├── Boost.cmake
 │   ├── GTest.cmake
 │   └── CPM.cmake
 ├── include/                # Header files
 │   └── myproject.h
-├── src/                    # Source files
+├── src/                    # Source (lib) files
 |   ├── CMakeLists.txt
-│   └── main.cpp
+│   └── lib.cpp
 ├── tests/                  # Test files
 |   ├── CMakeLists.txt
 │   └── test_main.cpp
