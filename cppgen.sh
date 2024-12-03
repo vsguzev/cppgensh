@@ -83,6 +83,7 @@ target_include_directories(\${PROJECT_NAME}_app
 target_link_libraries(${PROJECT_NAME}_app
   PRIVATE
     # add libraries here
+    ${PROJECT_NAME}
 )
 EOL
 
