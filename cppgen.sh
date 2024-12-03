@@ -27,7 +27,7 @@ PROJECT_NAME=$(echo "$PROJECT_NAME" | sed 's/ /_/g')
 PROJECT_NAME_LOWER=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
 
 # Download CPM.cmake
-download_if_not_exist "https://raw.githubusercontent.com/cpm-cmake/CPM.cmake/refs/heads/master/cmake/CPM.cmake" "cmake/CPM.cmake"
+download_if_not_exist "https://raw.githubusercontent.com/cpm-cmake/CPM.cmake/refs/tags/v0.40.2/cmake/CPM.cmake" "cmake/CPM.cmake"
 
 # Download additional CMake modules (e.g., GTest.cmake)
 echo "Downloading additional CMake modules..."
@@ -35,13 +35,15 @@ download_if_not_exist "https://raw.githubusercontent.com/vsguzev/cppgensh/refs/h
 
 # Create directory structure
 echo "Creating directory structure..."
-mkdir -p src include tests
+mkdir -p app src include tests
 
 # Create root CMakeLists.txt
 echo "Generating root CMakeLists.txt..."
 cat <<EOL > CMakeLists.txt
 cmake_minimum_required(VERSION 3.14)
 project($PROJECT_NAME VERSION 0.1.0 LANGUAGES CXX)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Include CPM.cmake
 include(cmake/CPM.cmake)
@@ -51,6 +53,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add subdirectories
+add_subdirectory(app)
 add_subdirectory(src)
 add_subdirectory(tests)
 
@@ -58,7 +61,24 @@ add_subdirectory(tests)
 EOL
 
 # Add additional CMake modules (e.g., GTest.cmake)
+echo 'include(cmake/Boost.cmake)' >> CMakeLists.txt
 echo 'include(cmake/GTest.cmake)' >> CMakeLists.txt
+
+# Create app/CMakeLists.txt
+echo "Generating app/CMakeLists.txt..."
+cat <<EOL > app/CMakeLists.txt
+add_executable(\${PROJECT_NAME}_app)
+
+target_sources(\${PROJECT_NAME}_app
+  PRIVATE
+    main.cpp
+)
+
+target_include_directories(\${PROJECT_NAME}_app
+  PUBLIC
+    \${CMAKE_CURRENT_SOURCE_DIR}/../include
+)
+EOL
 
 # Create src/CMakeLists.txt
 echo "Generating src/CMakeLists.txt..."
@@ -67,7 +87,7 @@ add_library(\${PROJECT_NAME} STATIC)
 
 target_sources(\${PROJECT_NAME}
   PRIVATE
-    main.cpp
+    lib.cpp
 )
 
 target_include_directories(\${PROJECT_NAME}
@@ -94,12 +114,23 @@ enable_testing()
 add_test(NAME \${PROJECT_NAME}_tests COMMAND \${PROJECT_NAME}_tests)
 EOL
 
-# Create source file
-echo "Generating src/main.cpp..."
-cat <<EOL > src/main.cpp
+# Create main source file
+echo "Generating app/main.cpp..."
+cat <<EOL > app/main.cpp
 #include "myproject.h"
 
 int main() {
+  somefunc();
+  return 0;
+}
+EOL
+
+# Create source file
+echo "Generating src/lib.cpp..."
+cat <<EOL > src/lib.cpp
+#include "myproject.h"
+
+int somefunc() {
   return 0;
 }
 EOL
@@ -109,7 +140,7 @@ echo "Generating include/myproject.h..."
 cat <<EOL > include/myproject.h
 #pragma once
 
-void say_hello();
+int somefunc();
 EOL
 
 # Create test file
@@ -119,7 +150,7 @@ cat <<EOL > tests/test_main.cpp
 #include <gtest/gtest.h>
 
 TEST(SampleTest, AssertionTrue) {
-  EXPECT_TRUE(true);
+  EXPECT_TRUE(somefunc() == 0);
 }
 
 int main(int argc, char **argv) {
